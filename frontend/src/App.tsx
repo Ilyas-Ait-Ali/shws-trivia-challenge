@@ -141,7 +141,7 @@ function EndPanel({
   subtitle,
   score,
   accuracy,
-  streak,
+  bestStreak,
   onNewSetup,
   onPlayAgain,
 }: {
@@ -150,7 +150,7 @@ function EndPanel({
   subtitle: string;
   score: number;
   accuracy: string;
-  streak: number;
+  bestStreak: number;
   onNewSetup: () => void;
   onPlayAgain: () => void;
 }) {
@@ -187,7 +187,7 @@ function EndPanel({
           <div className="grid grid-cols-3 gap-2">
             <SummaryCard label="Score" value={String(score)} />
             <SummaryCard label="Accuracy" value={accuracy} />
-            <SummaryCard label="Streak" value={String(streak)} />
+            <SummaryCard label="Streak" value={String(bestStreak)} />
           </div>
         </div>
 
@@ -312,7 +312,7 @@ export default function App() {
 
             <StatPill label="Score" value={String(g.score)} />
             <StatPill label="Accuracy" value={g.accuracy} />
-            <StatPill label="Streak" value={String(g.streak)} />
+            <StatPill label="Streak" value={String(g.bestStreak)} />
 
             <HeartsPill hearts={g.hearts} lossPulse={heartLossPulse} />
           </div>
@@ -435,7 +435,7 @@ export default function App() {
                 subtitle="You ran out of lives before reaching the target."
                 score={g.score}
                 accuracy={g.accuracy}
-                streak={g.streak}
+                bestStreak={g.bestStreak}
                 onNewSetup={g.resetToIdle}
                 onPlayAgain={g.startGame}
               />
@@ -448,7 +448,7 @@ export default function App() {
                 subtitle={`You reached ${WIN_TARGET} correct answers.`}
                 score={g.score}
                 accuracy={g.accuracy}
-                streak={g.streak}
+                bestStreak={g.bestStreak}
                 onNewSetup={g.resetToIdle}
                 onPlayAgain={g.startGame}
               />
