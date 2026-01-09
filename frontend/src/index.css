@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+/* Tailwind v4: make `dark:` follow the `.dark` class (not the OS) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* better defaults */
+html, body, #root { height: 100%; }
+
+/* remove native select arrow so our ▾ works consistently */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: none;
+}
