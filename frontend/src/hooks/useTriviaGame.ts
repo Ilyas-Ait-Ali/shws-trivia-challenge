@@ -18,7 +18,7 @@ export type Status = "idle" | "loading" | "playing" | "won" | "lost" | "error";
 export type Category = { id: number; name: string };
 
 export const WIN_TARGET = 10;
-export const MAX_HEARTS = 3;
+export const MAX_HEARTS = 5;
 
 export const STAGES: Array<{ difficulty: Difficulty; neededCorrect: number }> = [
   { difficulty: "easy", neededCorrect: 3 },
