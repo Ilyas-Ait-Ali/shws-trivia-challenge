@@ -106,6 +106,7 @@ export function useTriviaGame() {
   // polish
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [streak, setStreak] = useState(0);
+  const [bestStreak, setBestStreak] = useState(0);
   const [qAnimKey, setQAnimKey] = useState(0);
 
   const [metrics, setMetrics] = useState<Metrics>(createEmptyMetrics());
@@ -207,6 +208,7 @@ export function useTriviaGame() {
     setMetrics(createEmptyMetrics());
 
     setSelectedAnswer(null);
+    setBestStreak(0);
     setStreak(0);
     setQAnimKey((k) => k + 1);
 
@@ -387,7 +389,12 @@ export function useTriviaGame() {
       setFeedback({ kind: "ok", text: "Correct." });
       setCorrectCount((c) => c + 1);
       setScore((s) => s + pointsForDifficulty(current.difficulty));
-      setStreak((x) => x + 1);
+      setStreak((x) => {
+        const next = x + 1;
+        setBestStreak((b) => Math.max(b, next));
+        return next;
+      });
+
       setStageCorrect((sc) => sc + 1);
 
       // Do NOT auto-advance. Wait for Next click.
@@ -541,6 +548,7 @@ export function useTriviaGame() {
 
     selectedAnswer,
     streak,
+    bestStreak,
     qAnimKey,
 
     metrics,
