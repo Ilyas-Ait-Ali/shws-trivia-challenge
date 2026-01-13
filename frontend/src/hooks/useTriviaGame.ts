@@ -334,6 +334,7 @@ export function useTriviaGame() {
 
     setSelectedAnswer(null);
     setStreak(0);
+    setBestStreak(0);
     setQAnimKey((k) => k + 1);
 
     setHearts(MAX_HEARTS);
