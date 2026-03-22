@@ -89,12 +89,20 @@ questions/route.ts # Fetches and normalizes questions
 ```bash
 frontend/
 src/
-components/ui.tsx # Reusable UI components
-hooks/useTriviaGame.ts # Core game logic
-theme.ts # Dark / light theme handling
-App.tsx # Main application UI
-main.tsx # App bootstrap
-index.css # Tailwind + global styles
+components/ui.tsx      # Reusable UI components
+
+hooks/
+useTriviaGame.ts       # Public hook (entry point + re-exports)
+trivia/
+types.ts               # Shared types (Question, Metrics ...)
+constants.ts           # Game configuration (stages, hearts, targets)
+metrics.ts             # Metrics calculation logic
+utils.ts               # Helper utilities (scoring, fetch parsing, errors)
+
+theme.ts               # Dark / light theme handling
+App.tsx                # Main application UI
+main.tsx               # App bootstrap
+index.css              # Tailwind + global styles
 ```
 
 ---
