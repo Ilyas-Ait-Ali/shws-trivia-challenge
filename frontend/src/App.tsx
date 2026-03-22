@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { applyTheme, getInitialTheme, type ThemeMode } from "./theme";
-import { useTriviaGame, WIN_TARGET, MAX_HEARTS } from "./hooks/useTriviaGame";
+import { useTriviaGame } from "./hooks/useTriviaGame";
+import { WIN_TARGET, MAX_HEARTS } from "./hooks/trivia/constants";
+
 import {
   Card,
   Chip,

@@ -1,83 +1,16 @@
-// frontend/src/hooks/useTriviaGame.ts
 import { useEffect, useMemo, useRef, useState } from "react";
 
-export type Difficulty = "easy" | "medium" | "hard";
-export type QType = "" | "boolean" | "multiple";
-
-export type Question = {
-  id: string;
-  type: "boolean" | "multiple";
-  difficulty: Difficulty;
-  category: string;
-  question: string;
-  answers: string[];
-  correctAnswer: string;
-};
-
-export type Status = "idle" | "loading" | "playing" | "won" | "lost" | "error";
-export type Category = { id: number; name: string };
-
-export const WIN_TARGET = 10;
-export const MAX_HEARTS = 5;
-
-export const STAGES: Array<{ difficulty: Difficulty; neededCorrect: number }> = [
-  { difficulty: "easy", neededCorrect: 3 },
-  { difficulty: "medium", neededCorrect: 3 },
-  { difficulty: "hard", neededCorrect: 4 },
-];
-
-function pointsForDifficulty(d: Difficulty): number {
-  if (d === "easy") return 10;
-  if (d === "medium") return 20;
-  return 30;
-}
-
-export type Metrics = {
-  byDifficulty: Record<Difficulty, { attempts: number; correct: number }>;
-  byCategory: Record<string, { attempts: number; correct: number }>;
-};
-
-function createEmptyMetrics(): Metrics {
-  return {
-    byDifficulty: {
-      easy: { attempts: 0, correct: 0 },
-      medium: { attempts: 0, correct: 0 },
-      hard: { attempts: 0, correct: 0 },
-    },
-    byCategory: {},
-  };
-}
-
-type Feedback = { kind: "ok" | "no"; text: string } | null;
-
-async function readJsonSafe(res: Response): Promise<any> {
-  const text = await res.text();
-  try {
-    return JSON.parse(text);
-  } catch {
-    return { raw: text };
-  }
-}
-
-function formatFetchError(args: {
-  label: string;
-  url?: string;
-  status?: number;
-  body?: any;
-  cause?: unknown;
-}) {
-  const parts: string[] = [];
-  parts.push(args.label);
-  if (args.url) parts.push(`URL: ${args.url}`);
-  if (typeof args.status === "number") parts.push(`HTTP: ${args.status}`);
-  if (args.body) parts.push(`Body: ${JSON.stringify(args.body).slice(0, 300)}`);
-  if (args.cause && typeof args.cause === "object") {
-    const name = (args.cause as any)?.name;
-    const msg = (args.cause as any)?.message;
-    if (name || msg) parts.push(`Cause: ${name ?? ""} ${msg ?? ""}`.trim());
-  }
-  return parts.join(" • ");
-}
+import { MAX_HEARTS, STAGES, WIN_TARGET } from "./trivia/constants";
+import { buildUpdatedMetrics, createEmptyMetrics } from "./trivia/metrics";
+import { formatFetchError, pointsForDifficulty, readJsonSafe } from "./trivia/utils";
+import type {
+  Category,
+  Difficulty,
+  Feedback,
+  Metrics,
+  Question,
+  Status,
+} from "./trivia/types";
 
 export function useTriviaGame() {
   // setup
@@ -218,27 +151,7 @@ export function useTriviaGame() {
   }
 
   function bumpMetrics(q: Question, isCorrect: boolean) {
-    setMetrics((m) => {
-      const next: Metrics = {
-        byDifficulty: {
-          ...m.byDifficulty,
-          [q.difficulty]: {
-            attempts: m.byDifficulty[q.difficulty].attempts + 1,
-            correct: m.byDifficulty[q.difficulty].correct + (isCorrect ? 1 : 0),
-          },
-        },
-        byCategory: { ...m.byCategory },
-      };
-
-      const cat = q.category;
-      const prev = next.byCategory[cat] ?? { attempts: 0, correct: 0 };
-      next.byCategory[cat] = {
-        attempts: prev.attempts + 1,
-        correct: prev.correct + (isCorrect ? 1 : 0),
-      };
-
-      return next;
-    });
+    setMetrics((m) => buildUpdatedMetrics(m, q, isCorrect));
   }
 
   async function fetchStageQuestions(difficulty: Difficulty) {
