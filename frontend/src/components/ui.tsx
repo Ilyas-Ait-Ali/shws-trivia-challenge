@@ -1,4 +1,3 @@
-// src/components/ui.tsx
 import type React from "react";
 
 export const SELECT_CLASS =

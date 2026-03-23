@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-export const runtime = "nodejs"; // important because you use Buffer
+export const runtime = "nodejs";
 
 type Difficulty = "easy" | "medium" | "hard";
 type QuestionType = "multiple" | "boolean";
@@ -8,10 +8,10 @@ type QuestionType = "multiple" | "boolean";
 type OpenTDBResponse = {
   response_code: number;
   results: Array<{
-    type: string;        // base64 when encode=base64
-    difficulty: string;  // base64 when encode=base64
-    category: string;    // base64 when encode=base64
-    question: string;    // base64 when encode=base64
+    type: string;      
+    difficulty: string;
+    category: string;   
+    question: string;  
     correct_answer: string;
     incorrect_answers: string[];
   }>;
@@ -63,7 +63,7 @@ async function fetchWithTimeout(url: string, ms: number) {
 }
 
 async function fetchOpenTDBWithRetry(url: string) {
-  // tweak if you want
+  // Can be changed
   const attempts = [
     { timeoutMs: 4000, backoffMs: 250 },
     { timeoutMs: 6000, backoffMs: 500 },

@@ -6,7 +6,7 @@
 /* better defaults */
 html, body, #root { height: 100%; }
 
-/* remove native select arrow so our ▾ works consistently */
+/* remove native select arrow so ▾ works consistently */
 select {
   appearance: none;
   -webkit-appearance: none;
